@@ -1,28 +1,27 @@
 package Client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class MyClient {
     public static void main(String[] args) {
         System.out.println("Connecting to Server...");
-        try(Socket s = new Socket("localhost", 80)){
-            try(InputStream is = s.getInputStream();
-                OutputStream os = s.getOutputStream()){
+        try(Socket s = new Socket("localhost", 1234)){
+            try(OutputStream os = s.getOutputStream();
+                PrintWriter pw = new PrintWriter(os, true);
+                InputStream is = s.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br  = new BufferedReader(isr)){
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("Enter a number : ");
-                int num = scanner.nextInt();
-                System.out.println("Sending " + num);
-                os.write(num);
-                System.out.println("Waiting Server Response...");
-                int res = is.read();
-                System.out.println("Response : " + res);
-
+                System.out.print("Enter a String : ");
+                String str = scanner.nextLine();
+                System.out.println("Sending String : " + str);
+                pw.println(str);
+                String output_str = br.readLine();
+                System.out.println("Output String : " + output_str);
             } catch (IOException e){
-                System.err.println("Error with Streams " + e.getMessage());
+                System.err.println("Error with Output Streams " + e.getMessage());
             }
 
         } catch (IOException e){
