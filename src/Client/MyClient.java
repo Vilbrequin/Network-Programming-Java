@@ -13,13 +13,21 @@ public class MyClient {
                 InputStream is = s.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br  = new BufferedReader(isr)){
-                Scanner scanner = new Scanner(System.in);
-                System.out.print("Enter a String : ");
-                String str = scanner.nextLine();
-                System.out.println("Sending String : " + str);
-                pw.println(str);
-                String output_str = br.readLine();
-                System.out.println("Output String : " + output_str);
+                System.out.println(br.readLine());
+                while(true){
+                    try {
+                        Scanner scanner = new Scanner(System.in);
+                        System.out.print("Enter a String : ");
+                        String str = scanner.nextLine();
+                        System.out.println("Sending String : " + str);
+                        pw.println(str);
+                        String output_str = br.readLine();
+                        System.out.println("Output String : " + output_str);
+                    } catch (IOException e){
+                        System.err.println("Connection lost: " + e.getMessage());
+                        break;
+                    }
+                }
             } catch (IOException e){
                 System.err.println("Error with Output Streams " + e.getMessage());
             }
